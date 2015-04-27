@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController
 {
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var historyLabel: UILabel!
     
     var userIsInTheMiddleOfTypingANumber = false
     var brain = CalculatorBrain()
@@ -41,6 +42,8 @@ class ViewController: UIViewController
                 displayValue = 0
             }
         }
+        
+        updateHistory()
     }
     
     @IBAction func enter() {
@@ -50,6 +53,15 @@ class ViewController: UIViewController
         } else {
             displayValue = 0            
         }
+        
+        updateHistory()
+    }
+    
+    @IBAction func reset(sender: AnyObject) {
+        brain.reset()
+        displayValue = 0
+        userIsInTheMiddleOfTypingANumber = false
+        updateHistory()
     }
     
     var displayValue: Double {
@@ -60,5 +72,11 @@ class ViewController: UIViewController
             display.text = "\(newValue)"
             userIsInTheMiddleOfTypingANumber = false
         }
+    }
+    
+    private func updateHistory() {
+        var historyStrings = brain.history
+        var historyString = (historyStrings as NSArray).componentsJoinedByString("\n");
+        historyLabel.text = historyString
     }
 }

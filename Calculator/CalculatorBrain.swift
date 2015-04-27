@@ -79,6 +79,16 @@ class CalculatorBrain
         return (nil, ops)
     }
     
+    var history: [String] {
+        get {
+            return opStack.map { $0.description }
+        }
+    }
+    
+    func reset() {
+        opStack.removeAll(keepCapacity: false)
+    }
+    
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
         println("\(opStack) = \(result) with \(remainder) left over")
