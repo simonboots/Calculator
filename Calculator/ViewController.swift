@@ -57,6 +57,16 @@ class ViewController: UIViewController
         updateHistory()
     }
     
+    @IBAction func backspace(sender: AnyObject) {
+        var displayText = display.text!
+        if count(displayText) > 1 {
+            display.text = dropLast(displayText)
+        } else {
+            display.text = "0"
+            userIsInTheMiddleOfTypingANumber = false
+        }
+    }
+    
     @IBAction func reset(sender: AnyObject) {
         brain.reset()
         displayValue = 0
