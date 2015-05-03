@@ -107,4 +107,18 @@ class CalculatorBrain
     
         return evaluate()
     }
+    
+    func didFinishOperation() -> Bool {
+        if let lastOp = opStack.last {
+            switch lastOp {
+            case .UnaryOperation(_,_):
+                fallthrough
+            case .BinaryOperation(_,_):
+                return true
+            default:
+                return false
+            }
+        }
+        return false
+    }
 }

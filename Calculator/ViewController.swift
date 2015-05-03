@@ -86,6 +86,11 @@ class ViewController: UIViewController
     
     private func updateHistory() {
         var historyStrings = brain.history
+        
+        if (brain.didFinishOperation()) {
+            historyStrings.append("=")
+        }
+        
         var historyString = (historyStrings as NSArray).componentsJoinedByString("\n");
         historyLabel.text = historyString
     }
