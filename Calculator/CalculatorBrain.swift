@@ -43,6 +43,7 @@ class CalculatorBrain
         knownOps["√"] = Op.UnaryOperation("√", sqrt )
         knownOps["sin"] = Op.UnaryOperation("sin", sin)
         knownOps["cos"] = Op.UnaryOperation("cos", cos)
+        knownOps["±"] = Op.UnaryOperation("±") { $0 * -1 }
         knownOps["π"] = Op.ConstantOperand("π", M_PI)
     }
     

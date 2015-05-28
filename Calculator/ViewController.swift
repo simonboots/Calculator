@@ -67,6 +67,22 @@ class ViewController: UIViewController
         }
     }
     
+    @IBAction func negate(sender: UIButton) {
+        if userIsInTheMiddleOfTypingANumber {
+            var displayText = display.text!
+            let isNegative = displayText.hasPrefix("-")
+            if isNegative {
+                displayText = displayText.stringByReplacingOccurrencesOfString("-", withString: "", options: .LiteralSearch, range: nil)
+            } else {
+                displayText = "-" + displayText
+            }
+            
+            display.text = displayText
+        } else {
+            operate(sender)
+        }
+    }
+    
     @IBAction func reset(sender: AnyObject) {
         brain.reset()
         displayValue = 0
