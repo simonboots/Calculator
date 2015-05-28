@@ -36,11 +36,7 @@ class ViewController: UIViewController
         }
         
         if let operation = sender.currentTitle {
-            if let result = brain.performOperation(operation) {
-                displayValue = result
-            } else {
-                displayValue = 0
-            }
+            displayValue = brain.performOperation(operation)
         }
         
         updateHistory()
@@ -48,13 +44,10 @@ class ViewController: UIViewController
     
     @IBAction func enter() {
         userIsInTheMiddleOfTypingANumber = false
-        if let result = brain.pushOperand(displayValue) {
-            displayValue = result
-        } else {
-            displayValue = 0            
+        if let value = displayValue {
+            displayValue = brain.pushOperand(value)
+            updateHistory()
         }
-        
-        updateHistory()
     }
     
     @IBAction func backspace(sender: AnyObject) {
@@ -90,12 +83,24 @@ class ViewController: UIViewController
         updateHistory()
     }
     
-    var displayValue: Double {
+    var displayValue: Double? {
         get {
-            return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+            var doubleValue : Double? = nil
+            if let displayText = display.text {
+                if let numberFromDisplayText = NSNumberFormatter().numberFromString(displayText) {
+                    doubleValue = numberFromDisplayText.doubleValue
+                }
+            }
+
+            return doubleValue
         }
         set {
-            display.text = "\(newValue)"
+            var displayValueString = "0"
+            if let doubleValue = newValue {
+                displayValueString = "\(doubleValue)"
+            }
+            
+            display.text = displayValueString
             userIsInTheMiddleOfTypingANumber = false
         }
     }
