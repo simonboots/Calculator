@@ -14,6 +14,7 @@
 		F465F1611AE4670C00B306B6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F465F15F1AE4670C00B306B6 /* LaunchScreen.xib */; };
 		F465F16D1AE4670C00B306B6 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F465F16C1AE4670C00B306B6 /* CalculatorTests.swift */; };
 		F465F1771AE4843E00B306B6 /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F465F1761AE4843E00B306B6 /* CalculatorBrain.swift */; };
+		F4B8D6E91B17E702008E0EFA /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F465F1761AE4843E00B306B6 /* CalculatorBrain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -225,6 +226,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4B8D6E91B17E702008E0EFA /* CalculatorBrain.swift in Sources */,
 				F465F16D1AE4670C00B306B6 /* CalculatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,6 +417,7 @@
 				F465F1721AE4670C00B306B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F465F1731AE4670C00B306B6 /* Build configuration list for PBXNativeTarget "CalculatorTests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +426,7 @@
 				F465F1751AE4670C00B306B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
