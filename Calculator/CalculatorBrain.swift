@@ -37,6 +37,7 @@ class CalculatorBrain
     
     private var opStack = [Op]()
     private var knownOps = [String:Op]()
+    private var opsPrecedences = [String:Int]()
     
     init() {
         knownOps["×"] = Op.BinaryOperation("×", *)
@@ -48,6 +49,11 @@ class CalculatorBrain
         knownOps["cos"] = Op.UnaryOperation("cos", cos)
         knownOps["±"] = Op.UnaryOperation("±") { $0 * -1 }
         knownOps["π"] = Op.ConstantOperand("π", M_PI)
+        
+        opsPrecedences["×"] = 1
+        opsPrecedences["÷"] = 1
+        opsPrecedences["+"] = 2
+        opsPrecedences["−"] = 2
     }
     
     private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op])
@@ -92,6 +98,78 @@ class CalculatorBrain
         get {
             return opStack.map { $0.description }
         }
+    }
+    
+    var description: String? {
+        get {
+            var remainingOps = opStack
+            var descriptions = [String]()
+            var foundDescription = false
+            
+            do {
+                let descriptionData = buildDescription(remainingOps)
+                if let description = descriptionData.resultString {
+                    descriptions.append(description)
+                    foundDescription = true
+                } else {
+                    foundDescription = false
+                }
+            
+                remainingOps = descriptionData.remainingOps
+                
+            } while (foundDescription)
+            
+            return (descriptions.reverse() as NSArray).componentsJoinedByString(",")
+        }
+    }
+    
+    private func buildDescription(ops: [Op]) -> (resultString: String?, remainingOps: [Op], precedence: Int?) {
+        if !ops.isEmpty {
+            var remainingOps = ops
+            let op = remainingOps.removeLast()
+
+            switch op {
+            case .Operand(let operand):
+                return ("\(operand)", remainingOps, nil)
+                
+            case .ConstantOperand(let symbol, _):
+                return (symbol, remainingOps, nil)
+                
+            case .VariableOperand(let symbol):
+                return (symbol, remainingOps, nil)
+                
+            case .UnaryOperation(let symbol, _):
+                let operandDescription = buildDescription(remainingOps)
+                if let operand = operandDescription.resultString {
+                    return ("\(symbol)(\(operand))", operandDescription.remainingOps, nil)
+                }
+                
+            case .BinaryOperation(let symbol, _):
+                let op1Description = buildDescription(remainingOps)
+                var op1String = (op1Description.resultString != nil) ? op1Description.resultString! : "?"
+                    
+                let op2Description2 = buildDescription(op1Description.remainingOps)
+                var op2String = (op2Description2.resultString != nil) ? op2Description2.resultString! : "?"
+                
+                let selfPrecedence = opsPrecedences[symbol]!
+                
+                if let op1Precedence = op1Description.precedence {
+                    if (op1Precedence > selfPrecedence) {
+                        op1String = "(\(op1String))"
+                    }
+                }
+                
+                if let op2Precedence = op2Description2.precedence {
+                    if (op2Precedence > selfPrecedence) {
+                        op2String = "(\(op2String))"
+                    }
+                }
+                
+                return ("\(op2String)\(symbol)\(op1String)", op2Description2.remainingOps, opsPrecedences[symbol])
+            }
+        }
+
+        return (nil, ops, nil)
     }
     
     var variableValues = [String:Double]()
