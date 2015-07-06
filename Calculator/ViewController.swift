@@ -113,7 +113,7 @@ class ViewController: UIViewController
 
             historyLabel.text = historyString
         } else {
-            historyLabel.text = " "
+            historyLabel.text = ""
         }
     }
 }
