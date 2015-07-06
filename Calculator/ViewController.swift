@@ -93,6 +93,7 @@ class ViewController: UIViewController
     
     @IBAction func reset(sender: AnyObject) {
         brain.reset()
+        brain.resetVariables()
         displayValue = 0
         userIsInTheMiddleOfTypingANumber = false
         updateHistory()

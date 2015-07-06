@@ -182,6 +182,10 @@ class CalculatorBrain
         opStack.removeAll(keepCapacity: false)
     }
     
+    func resetVariables() {
+        variableValues.removeAll(keepCapacity: false)
+    }
+    
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
         println("\(opStack) = \(result) with \(remainder) left over")
