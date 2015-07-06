@@ -98,6 +98,20 @@ class ViewController: UIViewController
         updateHistory()
     }
     
+    @IBAction func storeM() {
+        if let currentValue = displayValue {
+            brain.variableValues["M"] = currentValue
+            displayValue = brain.evaluate()
+            userIsInTheMiddleOfTypingANumber = false
+        }
+    }
+    
+    @IBAction func pushM() {
+        brain.pushOperand("M")
+        displayValue = brain.evaluate()
+        updateHistory()
+    }
+    
     var displayValue: Double? {
         get {
             var doubleValue : Double? = nil
@@ -110,7 +124,7 @@ class ViewController: UIViewController
             return doubleValue
         }
         set {
-            var displayValueString = "0"
+            var displayValueString = "?"
             if let doubleValue = newValue {
                 displayValueString = displayNumberFormatter.stringFromNumber(doubleValue)!
             }

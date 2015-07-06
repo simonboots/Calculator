@@ -75,6 +75,29 @@ class CalculatorTests: XCTestCase {
         let description = brain.description
         
         XCTAssertEqual(description!, "√(1+2),cos(π)", "Unexpected description")
+    }
+    
+    func testMVariable() {
+        let brain = CalculatorBrain()
         
+        brain.pushOperand(7)
+        brain.pushOperand("M")
+        brain.performOperation("+")
+        var result = brain.performOperation("√")
+        
+        XCTAssertNil(result, "Unexpected result")
+        
+        brain.variableValues["M"] = 9
+        
+        result = brain.evaluate()
+        
+        XCTAssertNotNil(result, "Unexpected Result")
+        XCTAssertEqual(result!, Double(4), "Unexpected Result")
+        
+        brain.pushOperand(14)
+        result = brain.performOperation("+")
+        
+        XCTAssertNotNil(result, "Unexpected Result")
+        XCTAssertEqual(result!, Double(18), "Unexpected Result")
     }
 }
