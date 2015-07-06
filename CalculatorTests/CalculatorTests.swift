@@ -29,7 +29,7 @@ class CalculatorTests: XCTestCase {
         brain.performOperation("cos")
         
         let description = brain.description
-        XCTAssertEqual(description!, "cos(3.0)", "Unexpected description")
+        XCTAssertEqual(description!, "cos(3)", "Unexpected description")
     }
     
     func testMultipleOperations() {
@@ -47,17 +47,17 @@ class CalculatorTests: XCTestCase {
         brain.performOperation("cos")
         
         let description = brain.description
-        XCTAssertEqual(description!, "cos((1.0+2.0)÷(3.0+4.0))", "Unexpected description")
+        XCTAssertEqual(description!, "cos((1+2)÷(3+4))", "Unexpected description")
     }
     
     func testMissingOperand() {
         let brain = CalculatorBrain()
         
-        brain.pushOperand(1.0)
+        brain.pushOperand(1)
         brain.performOperation("+")
         
         let description = brain.description
-        XCTAssertEqual(description!, "?+1.0", "Unexpected description")
+        XCTAssertEqual(description!, "?+1", "Unexpected description")
     }
     
     func testMultipleCompleteExpressions() {
@@ -74,7 +74,7 @@ class CalculatorTests: XCTestCase {
         
         let description = brain.description
         
-        XCTAssertEqual(description!, "√(1.0+2.0),cos(π)", "Unexpected description")
+        XCTAssertEqual(description!, "√(1+2),cos(π)", "Unexpected description")
         
     }
 }
