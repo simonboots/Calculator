@@ -106,13 +106,14 @@ class ViewController: UIViewController
     }
     
     private func updateHistory() {
-        var historyStrings = brain.history
-        
-        if (brain.didFinishOperation()) {
-            historyStrings.append("=")
+        if var historyString = brain.description {
+            if (brain.didFinishOperation()) {
+                historyString = historyString + " ="
+            }
+
+            historyLabel.text = historyString
+        } else {
+            historyLabel.text = " "
         }
-        
-        var historyString = (historyStrings as NSArray).componentsJoinedByString("\n");
-        historyLabel.text = historyString
     }
 }
