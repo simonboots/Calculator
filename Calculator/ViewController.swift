@@ -13,9 +13,24 @@ class ViewController: UIViewController
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var historyLabel: UILabel!
     
+    private var displayNumberFormatter = NSNumberFormatter()
     var userIsInTheMiddleOfTypingANumber = false
     var brain = CalculatorBrain()
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
 
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    private func setup() {
+        displayNumberFormatter.numberStyle = .DecimalStyle
+    }
+    
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         if userIsInTheMiddleOfTypingANumber {
@@ -97,7 +112,7 @@ class ViewController: UIViewController
         set {
             var displayValueString = "0"
             if let doubleValue = newValue {
-                displayValueString = "\(doubleValue)"
+                displayValueString = displayNumberFormatter.stringFromNumber(doubleValue)!
             }
             
             display.text = displayValueString

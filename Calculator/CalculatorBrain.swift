@@ -38,6 +38,7 @@ class CalculatorBrain
     private var opStack = [Op]()
     private var knownOps = [String:Op]()
     private var opsPrecedences = [String:Int]()
+    private var descriptionNumberFormatter: NSNumberFormatter
     
     init() {
         knownOps["×"] = Op.BinaryOperation("×", *)
@@ -54,6 +55,9 @@ class CalculatorBrain
         opsPrecedences["÷"] = 1
         opsPrecedences["+"] = 2
         opsPrecedences["−"] = 2
+        
+        descriptionNumberFormatter = NSNumberFormatter()
+        descriptionNumberFormatter.numberStyle = .DecimalStyle
     }
     
     private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op])
@@ -130,7 +134,7 @@ class CalculatorBrain
 
             switch op {
             case .Operand(let operand):
-                return ("\(operand)", remainingOps, nil)
+                return (descriptionNumberFormatter.stringFromNumber(operand), remainingOps, nil)
                 
             case .ConstantOperand(let symbol, _):
                 return (symbol, remainingOps, nil)
