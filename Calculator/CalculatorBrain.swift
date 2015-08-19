@@ -35,6 +35,7 @@ class CalculatorBrain
         }
     }
     
+    var delegate: CalculatorBrainDelegate?
     private var opStack = [Op]()
     private var knownOps = [String:Op]()
     private var opsPrecedences = [String:Int]()
@@ -180,6 +181,7 @@ class CalculatorBrain
     
     func reset() {
         opStack.removeAll(keepCapacity: false)
+        notifyStackChange()
     }
     
     func resetVariables() {
@@ -194,19 +196,31 @@ class CalculatorBrain
     
     func pushOperand(operand: Double) -> Double? {
         opStack.append(Op.Operand(operand))
+        notifyStackChange()
         return evaluate()
     }
     
     func pushOperand(symbol: String) -> Double? {
         opStack.append(Op.VariableOperand(symbol))
+        notifyStackChange()
         return evaluate()
     }
     
     func performOperation(symbol: String) -> Double? {
         if let operation = knownOps[symbol] {
             opStack.append(operation)
+            notifyStackChange()
         }
     
+        return evaluate()
+    }
+    
+    func popOperationOrOperand() -> Double? {
+        if opStack.count > 0 {
+            opStack.removeLast()
+            notifyStackChange()
+        }
+        
         return evaluate()
     }
     
@@ -223,4 +237,15 @@ class CalculatorBrain
         }
         return false
     }
+    
+    func notifyStackChange() {
+        if let delegate = self.delegate {
+            delegate.calculatorBrainDidUpdateStack(self)
+        }
+    }
+}
+
+protocol CalculatorBrainDelegate
+{
+    func calculatorBrainDidUpdateStack(brain: CalculatorBrain)
 }

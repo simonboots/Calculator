@@ -8,13 +8,20 @@
 
 import UIKit
 
-class ViewController: UIViewController
+class ViewController: UIViewController, CalculatorBrainDelegate
 {
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var historyLabel: UILabel!
+    @IBOutlet weak var undoButton: UIButton!
     
     private var displayNumberFormatter = NSNumberFormatter()
     var userIsInTheMiddleOfTypingANumber = false
+    {
+        didSet {
+            updateUndoButton()
+        }
+    }
+    var userTypedNumber: String?
     var brain = CalculatorBrain()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -28,21 +35,28 @@ class ViewController: UIViewController
     }
     
     private func setup() {
+        brain.delegate = self
         displayNumberFormatter.numberStyle = .DecimalStyle
     }
     
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
+        
         if userIsInTheMiddleOfTypingANumber {
-            // Handle decimal point (only allow one)
-            if digit == "." && display.text!.rangeOfString(".", options: nil, range: nil, locale: nil) != nil {
-                return
+            if let typedNumber = userTypedNumber {
+                // Handle decimal point (only allow one)
+                if digit == "." && typedNumber.rangeOfString(".", options: nil, range: nil, locale: nil) != nil {
+                    return
+                }
+                
+                userTypedNumber = typedNumber + digit
             }
-            display.text = display.text! + digit
         } else {
-            display.text = digit
+            userTypedNumber = digit
             userIsInTheMiddleOfTypingANumber = true
         }
+        
+        displayStringValue = userTypedNumber
     }
     
     @IBAction func operate(sender: UIButton) {
@@ -53,39 +67,50 @@ class ViewController: UIViewController
         if let operation = sender.currentTitle {
             displayValue = brain.performOperation(operation)
         }
-        
-        updateHistory()
     }
     
     @IBAction func enter() {
-        userIsInTheMiddleOfTypingANumber = false
-        if let value = displayValue {
-            displayValue = brain.pushOperand(value)
-            updateHistory()
+        if let newOperandStringValue = userTypedNumber {
+            if let newOperandValue = NSNumberFormatter().numberFromString(newOperandStringValue)?.doubleValue {
+                displayValue = brain.pushOperand(newOperandValue)
+            }
         }
+        
+        userIsInTheMiddleOfTypingANumber = false
+        userTypedNumber = nil
     }
     
     @IBAction func backspace(sender: AnyObject) {
-        var displayText = display.text!
-        if count(displayText) > 1 {
-            display.text = dropLast(displayText)
+        
+        if userIsInTheMiddleOfTypingANumber {
+            if let typedNumber = userTypedNumber {
+                if count(typedNumber) > 1 {
+                    userTypedNumber = dropLast(typedNumber)
+                } else {
+                    userTypedNumber = "0"
+                    userIsInTheMiddleOfTypingANumber = false
+                }
+                
+                displayStringValue = userTypedNumber
+            }
+            
         } else {
-            display.text = "0"
-            userIsInTheMiddleOfTypingANumber = false
+            displayValue = brain.popOperationOrOperand()
         }
     }
     
     @IBAction func negate(sender: UIButton) {
         if userIsInTheMiddleOfTypingANumber {
-            var displayText = display.text!
-            let isNegative = displayText.hasPrefix("-")
-            if isNegative {
-                displayText = displayText.stringByReplacingOccurrencesOfString("-", withString: "", options: .LiteralSearch, range: nil)
-            } else {
-                displayText = "-" + displayText
+            if let typedNumber = userTypedNumber {
+                let isNegative = typedNumber.hasPrefix("-")
+                if isNegative {
+                    userTypedNumber = typedNumber.stringByReplacingOccurrencesOfString("-", withString: "", options: .LiteralSearch, range: nil)
+                } else {
+                    userTypedNumber = "-" + typedNumber
+                }
+                
+                displayStringValue = userTypedNumber
             }
-            
-            display.text = displayText
         } else {
             operate(sender)
         }
@@ -96,7 +121,7 @@ class ViewController: UIViewController
         brain.resetVariables()
         displayValue = 0
         userIsInTheMiddleOfTypingANumber = false
-        updateHistory()
+        userTypedNumber = nil
     }
     
     @IBAction func storeM() {
@@ -110,7 +135,21 @@ class ViewController: UIViewController
     @IBAction func pushM() {
         brain.pushOperand("M")
         displayValue = brain.evaluate()
-        updateHistory()
+    }
+    
+    var displayStringValue: String? {
+        get {
+            return display.text
+        }
+        
+        set {
+            var stringValue = "0"
+            if let newStringValue = newValue {
+                stringValue = newStringValue
+            }
+            
+            display.text = stringValue
+        }
     }
     
     var displayValue: Double? {
@@ -125,13 +164,12 @@ class ViewController: UIViewController
             return doubleValue
         }
         set {
-            var displayValueString = "?"
+            var displayValueString = "0"
             if let doubleValue = newValue {
                 displayValueString = displayNumberFormatter.stringFromNumber(doubleValue)!
             }
             
             display.text = displayValueString
-            userIsInTheMiddleOfTypingANumber = false
         }
     }
     
@@ -145,5 +183,21 @@ class ViewController: UIViewController
         } else {
             historyLabel.text = ""
         }
+    }
+    
+    private func updateUndoButton() {
+        if userIsInTheMiddleOfTypingANumber {
+            // Show Backspace
+            undoButton.setTitle("⬅︎", forState: .Normal)
+        } else {
+            // Show Undo
+            undoButton.setTitle("↺", forState: .Normal)
+        }
+    }
+    
+    // MARK: CalculatorBrainDelegate Methods
+    
+    func calculatorBrainDidUpdateStack(brain: CalculatorBrain) {
+        updateHistory()
     }
 }
