@@ -35,7 +35,7 @@ class CalculatorBrain
         }
     }
     
-    var delegate: CalculatorBrainDelegate?
+    weak var delegate: CalculatorBrainDelegate?
     private var opStack = [Op]()
     private var knownOps = [String:Op]()
     private var opsPrecedences = [String:Int]()
@@ -245,7 +245,7 @@ class CalculatorBrain
     }
 }
 
-protocol CalculatorBrainDelegate
+protocol CalculatorBrainDelegate: class
 {
     func calculatorBrainDidUpdateStack(brain: CalculatorBrain)
 }
