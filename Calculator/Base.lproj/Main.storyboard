@@ -404,7 +404,7 @@
                     </view>
                     <connections>
                         <outlet property="display" destination="f4o-B7-Re4" id="W7B-pi-HEd"/>
-                        <outlet property="historyLabel" destination="nET-Xh-xDx" id="7qM-MY-dVj"/>
+                        <outlet property="expressionLabel" destination="nET-Xh-xDx" id="53x-EJ-QJz"/>
                         <outlet property="undoButton" destination="x9d-ou-mwI" id="aV9-Fm-Nyx"/>
                     </connections>
                 </viewController>
