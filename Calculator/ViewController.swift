@@ -78,7 +78,8 @@ class ViewController: UIViewController, CalculatorBrainDelegate
         }
         
         if let operation = sender.currentTitle {
-            displayValue = brain.performOperation(operation)
+            let evaluationResult = brain.performOperation(operation)
+            showEvaluationResult(evaluationResult)
         }
     }
     
@@ -86,7 +87,8 @@ class ViewController: UIViewController, CalculatorBrainDelegate
         if let newOperandStringValue = userTypedNumber {
             // Convert user-entered number (string) to double and push onto stack
             if let newOperandValue = NSNumberFormatter().numberFromString(newOperandStringValue)?.doubleValue {
-                displayValue = brain.pushOperand(newOperandValue)
+                let evaluationResult = brain.pushOperand(newOperandValue)
+                showEvaluationResult(evaluationResult)
             }
         }
         
@@ -115,7 +117,8 @@ class ViewController: UIViewController, CalculatorBrainDelegate
             
         } else {
             // Undo
-            displayValue = brain.popOperationOrOperand()
+            let evaluationResult = brain.popOperationOrOperand()
+            showEvaluationResult(evaluationResult)
         }
     }
     
@@ -155,7 +158,8 @@ class ViewController: UIViewController, CalculatorBrainDelegate
             brain.variableValues["M"] = currentValue
             
             // Re-evaluate stack and update display
-            displayValue = brain.evaluate()
+            let evaluationResult = brain.evaluate()
+            showEvaluationResult(evaluationResult)
             userIsInTheMiddleOfTypingANumber = false
         }
     }
@@ -165,7 +169,36 @@ class ViewController: UIViewController, CalculatorBrainDelegate
         brain.pushOperand("M")
         
         // Re-evaulate stack and update display
-        displayValue = brain.evaluate()
+        let evaluationResult = brain.evaluate()
+        showEvaluationResult(evaluationResult)
+    }
+    
+    private func showEvaluationResult(evaluationResult: EvaluationResult){
+        switch evaluationResult {
+        case .Result(let result):
+            displayValue = result
+        case .Error(let errorCode):
+            let errorMessage = errorMessageForErrorCode(errorCode)
+            displayStringValue = errorMessage
+        }
+    }
+    
+    private func errorMessageForErrorCode(errorCode: ErrorCode) -> String {
+        let errorMessage: String
+        switch errorCode {
+        case .EmptyStack:
+            errorMessage = NSLocalizedString("EmptyStack", comment: "Empty stack")
+        case .DivisionByZero:
+            errorMessage = NSLocalizedString("DivisionByZero", comment: "Division by Zero")
+        case .SquareRootOfNegativeNumber:
+            errorMessage = NSLocalizedString("SquareRootOfNegNumber", comment: "Square Root of Neg Number")
+        case .NotEnoughOperands:
+            errorMessage = NSLocalizedString("NotEnoughOperands", comment: "Not Enough Operands")
+        case .VariableNotSet:
+            errorMessage = NSLocalizedString("VariableNotSet", comment: "Variable Not Set")
+        }
+        
+        return errorMessage
     }
     
     // String value for display

@@ -14,6 +14,7 @@
 		F465F1611AE4670C00B306B6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F465F15F1AE4670C00B306B6 /* LaunchScreen.xib */; };
 		F465F16D1AE4670C00B306B6 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F465F16C1AE4670C00B306B6 /* CalculatorTests.swift */; };
 		F465F1771AE4843E00B306B6 /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F465F1761AE4843E00B306B6 /* CalculatorBrain.swift */; };
+		F489D6831B8BDCBB00E828E4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F489D6811B8BDCBB00E828E4 /* Localizable.strings */; };
 		F4B8D6E91B17E702008E0EFA /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = F465F1761AE4843E00B306B6 /* CalculatorBrain.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,7 @@
 		F465F16B1AE4670C00B306B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F465F16C1AE4670C00B306B6 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
 		F465F1761AE4843E00B306B6 /* CalculatorBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = "<group>"; };
+		F489D6821B8BDCBB00E828E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				F465F1581AE4670C00B306B6 /* ViewController.swift */,
 				F465F15A1AE4670C00B306B6 /* Main.storyboard */,
 				F465F1761AE4843E00B306B6 /* CalculatorBrain.swift */,
+				F489D6801B8BDC8500E828E4 /* Resources */,
 				F465F1541AE4670C00B306B6 /* Supporting Files */,
 			);
 			path = Calculator;
@@ -114,6 +117,14 @@
 				F465F16B1AE4670C00B306B6 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F489D6801B8BDC8500E828E4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F489D6811B8BDCBB00E828E4 /* Localizable.strings */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F465F15C1AE4670C00B306B6 /* Main.storyboard in Resources */,
+				F489D6831B8BDCBB00E828E4 /* Localizable.strings in Resources */,
 				F465F1611AE4670C00B306B6 /* LaunchScreen.xib in Resources */,
 				F465F15E1AE4670C00B306B6 /* Images.xcassets in Resources */,
 			);
@@ -256,6 +268,14 @@
 				F465F1601AE4670C00B306B6 /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		F489D6811B8BDCBB00E828E4 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F489D6821B8BDCBB00E828E4 /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
