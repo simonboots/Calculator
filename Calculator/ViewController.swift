@@ -38,7 +38,7 @@ class ViewController: UIViewController, CalculatorBrainDelegate
         setup()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
@@ -54,7 +54,7 @@ class ViewController: UIViewController, CalculatorBrainDelegate
         if userIsInTheMiddleOfTypingANumber {
             if let typedNumber = userTypedNumber {
                 // Allow only one decimal point
-                if digit == "." && typedNumber.rangeOfString(".", options: nil, range: nil, locale: nil) != nil {
+                if digit == "." && typedNumber.rangeOfString(".", options: [], range: nil, locale: nil) != nil {
                     return
                 }
                 
@@ -102,9 +102,9 @@ class ViewController: UIViewController, CalculatorBrainDelegate
         if userIsInTheMiddleOfTypingANumber {
             // Backspace
             if let typedNumber = userTypedNumber {
-                if count(typedNumber) > 1 {
+                if typedNumber.characters.count > 1 {
                     // Remove least significant digit from user-entered number
-                    userTypedNumber = dropLast(typedNumber)
+                    userTypedNumber = String(typedNumber.characters.dropLast())
                 } else {
                     // Reset user-entered number to 0 and reset state
                     userTypedNumber = "0"

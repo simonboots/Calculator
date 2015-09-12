@@ -103,7 +103,7 @@ class CalculatorTests: XCTestCase {
         evaluationResult = brain.evaluate()
         
         switch evaluationResult {
-        case .Error(let errorCode):
+        case .Error(_):
             XCTAssertTrue(false, "Unexpected Result")
         case .Result(let result):
             XCTAssertEqual(result, Double(4), "Unexpected Result")
@@ -113,7 +113,7 @@ class CalculatorTests: XCTestCase {
         evaluationResult = brain.performOperation("+")
         
         switch evaluationResult {
-        case .Error(let errorCode):
+        case .Error(_):
             XCTAssertTrue(false, "Unexpected Result")
         case .Result(let result):
             XCTAssertEqual(result, Double(18), "Unexpected Result")

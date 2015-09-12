@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ErrorCode: Int, Printable {
+enum ErrorCode: Int, CustomStringConvertible {
     case EmptyStack
     case DivisionByZero
     case SquareRootOfNegativeNumber
@@ -21,7 +21,7 @@ enum ErrorCode: Int, Printable {
 }
 
 // Evaluation result can either be a double or an error string
-enum EvaluationResult: Printable {
+enum EvaluationResult: CustomStringConvertible {
     case Result(Double)
     case Error(ErrorCode)
     
@@ -46,7 +46,7 @@ class CalculatorBrain
     
     
     // Available operation types
-    private enum Op: Printable {
+    private enum Op: CustomStringConvertible {
         // Basic operand, e.g. 1.234
         case Operand(Double)
         
@@ -226,7 +226,7 @@ class CalculatorBrain
             var foundDescription = false
             
             // Build expressions until all operations and operands in the stack are used
-            do {
+            repeat {
                 let descriptionData = buildDescription(remainingOps)
                 if let description = descriptionData.resultString {
                     descriptions.append(description)
@@ -240,7 +240,7 @@ class CalculatorBrain
             } while (foundDescription)
             
             // Concatenate expressions with commas
-            return (descriptions.reverse() as NSArray).componentsJoinedByString(",")
+            return (Array(descriptions.reverse()) as NSArray).componentsJoinedByString(",")
         }
     }
     
@@ -320,13 +320,13 @@ class CalculatorBrain
     // Evaluate opStack
     func evaluate() -> EvaluationResult {
         let (result, remainder) = evaluate(opStack)
-        println("\(opStack) = \(result) with \(remainder) left over")
+        print("\(opStack) = \(result) with \(remainder) left over")
         return result
     }
     
     // Evaluate opStack and return result or error code
     func evaluateAndReportErrors() -> EvaluationResult {
-        let (result, remainder) = evaluate(opStack)
+        let (result, _) = evaluate(opStack)
         return result
     }
     
